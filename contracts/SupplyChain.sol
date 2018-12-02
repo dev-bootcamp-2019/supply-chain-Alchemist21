@@ -42,11 +42,19 @@ contract SupplyChain {
     event Received(uint sku);
 
 /* Create a modifer that checks if the msg.sender is the owner of the contract */
-    require (msg.sender == owner, "only the owner can access this")
+  modifier onlyOwner() {
+    require(msg.sender == owner, "only the owner can access this");
+    _;
+  }
+  modifier verifyCaller (address _address) {
+    require (msg.sender == _address, "invalid caller");
+    _;
+  }
 
-  modifier verifyCaller (address _address) { require (msg.sender == _address); _;}
-
-  modifier paidEnough(uint _price) { require(msg.value >= _price); _;}
+  modifier paidEnough(uint _price) {
+    require(msg.value >= _price, "Insufficient amount");
+    _;
+  }
   modifier checkValue(uint _sku) {
     //refund them after pay for item (why it is before, _ checks for logic before func)
     _;
