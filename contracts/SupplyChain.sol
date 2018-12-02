@@ -66,24 +66,24 @@ contract SupplyChain {
   /* For each of the following modifiers, use what you learned about modifiers
    to give them functionality. For example, the forSale modifier should require
    that the item with the given sku has the state ForSale. */
-  modifier forSale(uint_sku) {
-    require (items[sku].state) == State.Forsale, "this item is for sale");
+  modifier forSale(uint _sku) {
+    require (items[_sku].state) == State.Forsale, "this item is for sale");
     _;
   }
 
   modifier sold(uint _sku) {
-    require (items[sku].state) == State.Sold, "this item is sold");
+    require (items[_sku].state) == State.Sold, "this item is sold");
     _;
   }
 
   modifier shipped(uint _sku) {
-      require (items[sku].state) == State.Shipped, "this item is shipped");
+      require (items[_sku].state) == State.Shipped, "this item is shipped");
     _;
   }
 
 
   modifier received(uint _sku) {
-      require (items[sku].state) == State.Received, "this item is received");
+      require (items[_sku].state) == State.Received, "this item is received");
       _;
   }
 
