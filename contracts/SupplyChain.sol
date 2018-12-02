@@ -3,10 +3,10 @@ pragma solidity ^0.4.23;
 contract SupplyChain {
 
   /* set owner */
-  address owner;
+  address public owner;
 
   /* Add a variable called skuCount to track the most recent sku # */
-  uint128 public skuCount;
+  uint public skuCount;
   /* Add a line that creates a public mapping that maps the SKU (a number) to an Item.
      Call this mappings items
   */
@@ -26,8 +26,8 @@ contract SupplyChain {
     if you need help you can ask around :)
   */
   struct Item {
-    uint128 sku;
-    uint128 price;
+    uint sku;
+    uint price;
     string name;
     State name;
     address seller;
@@ -67,23 +67,23 @@ contract SupplyChain {
    to give them functionality. For example, the forSale modifier should require
    that the item with the given sku has the state ForSale. */
   modifier forSale(uint _sku) {
-    require (items[_sku].state) == State.Forsale, "this item is for sale");
+    require (items[_sku].state) == State.Forsale);
     _;
   }
 
   modifier sold(uint _sku) {
-    require (items[_sku].state) == State.Sold, "this item is sold");
+    require (items[_sku].state) == State.Sold);
     _;
   }
 
   modifier shipped(uint _sku) {
-      require (items[_sku].state) == State.Shipped, "this item is shipped");
+      require (items[_sku].state) == State.Shipped);
     _;
   }
 
 
   modifier received(uint _sku) {
-      require (items[_sku].state) == State.Received, "this item is received");
+      require (items[_sku].state) == State.Received);
       _;
   }
 
