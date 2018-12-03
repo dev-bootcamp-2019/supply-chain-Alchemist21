@@ -11,7 +11,7 @@ contract TestSupplyChain {
     function testOnlyOwnerModifier() public {
       //instantiate contract
       SupplyChain s = new SupplyChain();
-      ProxyTester p = nre ProxyTester();
+      ProxyTester p = new ProxyTester();
       //declare value
       uint expecter = 1;
       //test assertion
