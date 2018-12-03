@@ -3,10 +3,10 @@ pragma solidity ^0.4.23;
 contract SupplyChain {
 
   /* set owner */
-  address public owner;
+  address owner;
 
   /* Add a variable called skuCount to track the most recent sku # */
-  uint public skuCount;
+  uint skuCount;
   /* Add a line that creates a public mapping that maps the SKU (a number) to an Item.
      Call this mappings items
   */
@@ -18,7 +18,7 @@ contract SupplyChain {
     Received
     (declaring them in this order is important for testing)
   */
-  enum State { ForSale, Sold, Shipped, Received}
+  enum State {ForSale, Sold, Shipped, Received}
 
   /* Create a struct named Item.
     Here, add a name, sku, price, state, seller, and buyer
@@ -36,21 +36,17 @@ contract SupplyChain {
 
   /* Create 4 events with the same name as each possible State (see above)
     Each event should accept one argument, the sku*/
-    event ForSale(uint sku);
-    event Sold(uint sku);
-    event Shipped(uint sku);
-    event Received(uint sku);
+    event ForSale (uint sku);
+    event Sold (uint sku);
+    event Shipped (uint sku);
+    event Received (uint sku);
 
 /* Create a modifer that checks if the msg.sender is the owner of the contract */
-  modifier onlyOwner() {
-    require(msg.sender == owner, "only the owner can access this");
-    _;
-  }
+
   modifier verifyCaller (address _address) {
     require (msg.sender == _address, "invalid caller");
     _;
   }
-
   modifier paidEnough(uint _price) {
     require(msg.value >= _price, "Insufficient amount");
     _;
@@ -66,24 +62,24 @@ contract SupplyChain {
   /* For each of the following modifiers, use what you learned about modifiers
    to give them functionality. For example, the forSale modifier should require
    that the item with the given sku has the state ForSale. */
-  modifier forSale(uint _sku) {
-    require (items[_sku].state == State.Forsale, "this item is for sale");
+  modifier forSale (uint sku) {
+    require (items[sku].state == State.Forsale, "this item is for sale");
     _;
   }
 
-  modifier sold(uint _sku) {
-    require (items[_sku].state == State.Sold, "this item is sold");
+  modifier sold(uint sku) {
+    require (items[sku].state == State.Sold, "this item is sold");
     _;
   }
 
-  modifier shipped(uint _sku) {
-      require (items[_sku].state == State.Shipped, "this item is shipped");
+  modifier shipped(uint sku) {
+      require (items[sku].state == State.Shipped, "this item is shipped");
     _;
   }
 
 
-  modifier received(uint _sku) {
-      require (items[_sku].state == State.Received, "this item is received");
+  modifier received(uint sku) {
+      require (items[sku].state == State.Received, "this item is received");
       _;
   }
 
@@ -95,11 +91,10 @@ contract SupplyChain {
        skuCount = 0;
   }
 
-  function addItem(string _name, uint _price) public returns(bool){
+  function addItem(string _name, uint _price) public {
     emit ForSale(skuCount);
     items[skuCount] = Item({name: _name, sku: skuCount, price: _price, state: State.ForSale, seller: msg.sender, buyer: 0});
     skuCount = skuCount + 1;
-    return true;
   }
 
   /* Add a keyword so the function can be paid. This function should transfer money
@@ -112,16 +107,12 @@ contract SupplyChain {
     public
     payable
     forSale(sku)
-    paidEnough(msg.value)
+    paidEnough(items[sku].price)
     checkValue(sku)
   {
-    //struct in storage
-    Item storage i = items[sku];
-    //change state
-    i.buyer = msg.sender;
-    i.state = State.Sold;
-    //transfer to seller
-    //emit events
+    items[sku].seller.transfer(items[sku].price);
+    items[sku].buyer = msg.sender;
+    items[sku].state = State.Sold;
     emit Sold(sku);
   }
 
@@ -131,15 +122,10 @@ contract SupplyChain {
     public
     sold(sku)
     verifyCaller(items[sku].seller)
+    sold(sku)
   {
-    //struct in storage
-    Item storage i = items[sku];
-    //change state
-    i.buyer = msg.sender;
-    i.state = State.Shipped;
-    //transfer to seller
-    //emit events
     emit Shipped(sku);
+    items[sku].state = State.Shipped;
   }
 
   /* Add 2 modifiers to check if the item is shipped already, and that the person calling this function
@@ -149,12 +135,8 @@ contract SupplyChain {
     shipped(sku)
     verifyCaller(items[sku].buyer)
   {
-    //struct in storage
-    Item storage i = items[sku];
-    //change state
-    i.state = State.Received;
-    //emit events
     emit Received(sku);
+    items[sku].state = State.Received;
   }
 
   /* We have these functions completed so we can run tests, just ignore it :) */
@@ -166,11 +148,6 @@ contract SupplyChain {
     seller = items[_sku].seller;
     buyer = items[_sku].buyer;
     return (name, sku, price, state, seller, buyer);
-  }
-  //function to test onlyOwner
-  function accessByOwner() public view onlyOwner() returns(bool){
-    //will only return when modifier conditions are met
-    return true;
   }
 
 }
