@@ -6,7 +6,12 @@ contract SupplyChain {
   address owner;
 
   /* Add a variable called skuCount to track the most recent sku # */
-  uint skuCount;
+  uint public skuCount;
+
+
+
+
+
   /* Add a line that creates a public mapping that maps the SKU (a number) to an Item.
      Call this mappings items
   */
@@ -29,7 +34,7 @@ contract SupplyChain {
     uint sku;
     uint price;
     string name;
-    State name;
+    State state;
     address seller;
     address buyer;
   }
@@ -63,7 +68,7 @@ contract SupplyChain {
    to give them functionality. For example, the forSale modifier should require
    that the item with the given sku has the state ForSale. */
   modifier forSale (uint sku) {
-    require (items[sku].state == State.Forsale, "this item is for sale");
+    require (items[sku].state == State.ForSale, "this item is for sale");
     _;
   }
 
