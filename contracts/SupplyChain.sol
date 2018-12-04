@@ -23,7 +23,7 @@ contract SupplyChain {
     Received
     (declaring them in this order is important for testing)
   */
-  enum State {ForSale, Sold, Shipped, Received}
+  enum State { ForSale, Sold, Shipped, Received}
 
   /* Create a struct named Item.
     Here, add a name, sku, price, state, seller, and buyer
@@ -67,24 +67,24 @@ contract SupplyChain {
   /* For each of the following modifiers, use what you learned about modifiers
    to give them functionality. For example, the forSale modifier should require
    that the item with the given sku has the state ForSale. */
-  modifier forSale (uint sku) {
-    require (items[sku].state == State.ForSale, "this item is for sale");
+  modifier forSale (uint _sku) {
+    require (items[_sku].state == State.ForSale, "this item is for sale");
     _;
   }
 
-  modifier sold(uint sku) {
-    require (items[sku].state == State.Sold, "this item is sold");
+  modifier sold(uint _sku) {
+    require (items[_sku].state == State.Sold, "this item is sold");
     _;
   }
 
-  modifier shipped(uint sku) {
-      require (items[sku].state == State.Shipped, "this item is shipped");
+  modifier shipped(uint _sku) {
+      require (items[_sku].state == State.Shipped, "this item is shipped");
     _;
   }
 
 
-  modifier received(uint sku) {
-      require (items[sku].state == State.Received, "this item is received");
+  modifier received(uint _sku) {
+      require (items[_sku].state == State.Received, "this item is received");
       _;
   }
 
