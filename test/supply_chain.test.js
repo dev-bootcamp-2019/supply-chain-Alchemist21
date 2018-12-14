@@ -26,7 +26,7 @@ contract('SupplyChain', function(accounts) {
         await supplyChain.addItem(name, price, {from: alice});
       const tx = await supplyChain.addItem(name, price, {from:alice});
       if (tx.logs[0].event == "ForSale") {
-              sku = tx.logs[0].args.sku.toString(0)
+              sku = tx.logs[0].args.sku.toNumber();
               eventEmitted = true
       }
 
@@ -40,7 +40,7 @@ contract('SupplyChain', function(accounts) {
         assert.equal(result[4], alice, 'the address adding the item should be listed as the seller')
         assert.equal(result[5], emptyAddress, 'the buyer address should be set to 0 when an item is added')
         assert.equal(eventEmitted, true, 'adding an item should emit a For Sale event')
-    })
+      })
 
     it("should allow someone to purchase an item", async() => {
         const supplyChain = await SupplyChain.deployed()
@@ -61,7 +61,7 @@ contract('SupplyChain', function(accounts) {
 
         const tx = await supplyChain.buyItem(sku, {from: bob, value: amount})
 	       if (tx.logs[0].event === "Sold") {
-		            sku = tx.logs[0].args.sku.toString(10)
+		            sku = tx.logs[0].args.sku.toNumber();
 		            eventEmitted = true
 	       }
 
@@ -90,10 +90,10 @@ contract('SupplyChain', function(accounts) {
             eventEmitted = true
         })
     */
-        await supplyChain.shipItem(sku, {from: alice})
+        //await supplyChain.shipItem(sku, {from: alice})
         const tx = await supplyChain.shipItem(sku, {from: alice})
 	       if (tx.logs[0].event === "Shipped") {
-		         sku = tx.logs[0].args.sku.toString(10)
+		         sku = tx.logs[0].args.sku.toNumber();
 		           eventEmitted = true
 	      }
 
@@ -115,11 +115,11 @@ contract('SupplyChain', function(accounts) {
         })
 
     */
-        await supplyChain.receiveItem(sku, {from: bob})
+        //await supplyChain.receiveItem(sku, {from: bob})
 
         const tx = await supplyChain.receiveItem(sku, {from: bob})
         	if (tx.logs[0].event === "Received") {
-        		sku = tx.logs[0].args.sku.toString(10)
+        		sku = tx.logs[0].args.sku.toNumber();
         		eventEmitted = true
         }
 

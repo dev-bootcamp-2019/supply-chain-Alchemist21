@@ -11,7 +11,6 @@ contract SupplyChain {
 
 
 
-
   /* Add a line that creates a public mapping that maps the SKU (a number) to an Item.
      Call this mappings items
   */
@@ -96,7 +95,7 @@ contract SupplyChain {
        skuCount = 0;
   }
 
-  function addItem(string _name, uint _price) public {
+  function addItem(string _name, uint _price) public returns(bool){
     emit ForSale(skuCount);
     items[skuCount] = Item({name: _name, sku: skuCount, price: _price, state: State.ForSale, seller: msg.sender, buyer: 0});
     skuCount = skuCount + 1;
